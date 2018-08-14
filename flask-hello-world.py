@@ -4,6 +4,11 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+try:
+    import flask_config
+except ImportError:
+    raise ValueError('Config not found!')
+
 
 class DemoEntity(declarative_base()):
     __tablename__ = "demo"
@@ -32,4 +37,7 @@ def hello_world():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(
+        host=flask_config.web_config['host'],
+        port=flask_config.web_config['port']
+    )
