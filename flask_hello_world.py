@@ -20,7 +20,6 @@ class DemoEntity(declarative_base()):
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def hello_world():
     try:
