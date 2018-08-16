@@ -25,19 +25,15 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    try:
-        engine = create_engine('mysql://%s:%s@%s/%s' % (flask_config.db_config['username'],
-                                                        flask_config.db_config['password'],
-                                                        flask_config.db_config['host'],
-                                                        flask_config.db_config['database']), echo=False)
-        Session = sessionmaker(bind=engine)
-        OrmSession = Session()
+    engine = create_engine('mysql://%s:%s@%s/%s' % (flask_config.db_config['username'],
+                                                flask_config.db_config['password'],
+                                                flask_config.db_config['host'],
+                                                flask_config.db_config['database']), echo=False)
+    Session = sessionmaker(bind=engine)
+    OrmSession = Session()
 
-        rand = random.randrange(0, OrmSession.query(DemoEntity).count())
-        demo = OrmSession.query(DemoEntity)[rand]
-
-    except Exception as e:
-        raise ValueError(e)
+    rand = random.randrange(0, OrmSession.query(DemoEntity).count())
+    demo = OrmSession.query(DemoEntity)[rand]
 
 
     return render_template('index.html',
