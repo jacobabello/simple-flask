@@ -22,13 +22,14 @@ class DemoEntity(declarative_base()):
 
 
 app = Flask(__name__)
-
-@app.route('/')
-def hello_world():
-    engine = create_engine('mysql://%s:%s@%s/%s' % (flask_config.db_config['username'],
+engine = create_engine('mysql://%s:%s@%s/%s' % (flask_config.db_config['username'],
                                                 flask_config.db_config['password'],
                                                 flask_config.db_config['host'],
                                                 flask_config.db_config['database']), echo=False)
+
+
+@app.route('/')
+def hello_world():
     Session = sessionmaker(bind=engine)
     OrmSession = Session()
 
