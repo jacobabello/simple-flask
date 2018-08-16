@@ -1,8 +1,10 @@
 from flask import Flask
+from flask import render_template
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import random
 
 try:
     import flask_config
@@ -11,11 +13,12 @@ except ImportError:
 
 
 class DemoEntity(declarative_base()):
-    __tablename__ = "demo"
+    __tablename__ = "demo_ca_states"
 
     id = Column(Integer, primary_key=True)
-    firstname = Column(String)
-    lastname = Column(String)
+    demo_ca_state_abbr = Column(String)
+    demo_ca_state_name = Column(String)
+    demo_ca_state_capital = Column(String)
 
 
 app = Flask(__name__)
@@ -30,12 +33,17 @@ def hello_world():
         Session = sessionmaker(bind=engine)
         OrmSession = Session()
 
-        demo = OrmSession.query(DemoEntity).first()
+        rand = random.randrange(0, OrmSession.query(DemoEntity).count())
+        demo = OrmSession.query(DemoEntity)[rand]
 
     except Exception as e:
-        raise ValueError(str(e))
+        raise ValueError(e)
 
-    return 'This is a simple flask Hello World! web app, Succesfully connected to database: Welcome %s, %s' % (demo.firstname, demo.lastname)
+
+    return render_template('index.html',
+                           ca_state_abbr=demo.demo_ca_state_abbr,
+                           ca_state_name=demo.demo_ca_state_name,
+                           ca_state_capital=demo.demo_ca_state_capital)
 
 
 if __name__ == '__main__':
