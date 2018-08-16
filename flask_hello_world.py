@@ -35,7 +35,7 @@ def hello_world():
 
     rand = random.randrange(0, OrmSession.query(DemoEntity).count())
     demo = OrmSession.query(DemoEntity)[rand]
-
+    OrmSession.close()
 
     return render_template('index.html',
                            ca_state_abbr=demo.demo_ca_state_abbr,
